@@ -1,0 +1,27 @@
+<app-header title="Customers"></app-header>
+
+<div class="customers-container">
+    <div class="loading" *ngIf="loading">Loading customers...</div>
+
+    <div class="table-container" *ngIf="!loading">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let customer of customers">
+                    <td>{{ customer.id }}</td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.email }}</td>
+                </tr>
+                <tr *ngIf="customers.length === 0">
+                    <td colspan="3" class="no-data">No customers found</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

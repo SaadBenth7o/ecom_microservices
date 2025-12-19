@@ -1,326 +1,285 @@
-# 🚀 Architecture Microservices - Projet Spring Boot
+# E-Commerce Microservices Application
 
-> **Architecture microservices complète avec Service Discovery, API Gateway, Config Server et services métier**
+Application e-commerce complète utilisant une architecture microservices avec Spring Boot et Angular 18.
+
+## Architecture
+
+### Backend - Microservices Spring Boot
+
+```
+┌─────────────────────────────────────────┐
+│         Frontend Angular 18              │
+│         http://localhost:PORT            │
+└────────────────┬────────────────────────┘
+                 │ HTTP
+                 ▼
+┌─────────────────────────────────────────┐
+│       API Gateway (Port 8888)           │
+│       + CORS Configuration              │
+└──┬──────────┬──────────┬────────────────┘
+   │          │          │
+   ▼          ▼          ▼
+┌─────────┐ ┌──────────┐ ┌────────┐
+│Customer │ │Inventory │ │Billing │
+│Service  │ │Service   │ │Service │
+│  :8081  │ │  :8082   │ │  :8083 │
+└────┬────┘ └─────┬────┘ └───┬────┘
+     │            │           │
+     └────────────┴───────────┘
+                  │
+          ┌───────▼───────┐
+          │    Eureka     │
+          │   Discovery   │
+          │     :8761     │
+          └───────────────┘
+```
+
+### Services
+
+| Service | Port | Description |
+|---------|------|-------------|
+| **config-service** | 8888 | Configuration centralisée (Spring Cloud Config) |
+| **discovery-service** | 8761 | Service registry (Eureka Server) |
+| **gateway-service** | 8888 | API Gateway + CORS + Routing |
+| **customer-service** | 8081 | Gestion des clients |
+| **inventory-service** | 8082 | Gestion du catalogue produits |
+| **billing-service** | 8083 | Gestion des factures |
+
+### Frontend
+
+- **Framework** : Angular 18.2.0 (standalone components)
+- **Design** : Minimaliste et moderne
+- **Pages** : Dashboard, Customers, Products, Bills
+- **Port** : Dynamique (assigné automatiquement par Angular CLI)
 
 ---
 
-## 🏗️ Architecture du Projet
+## Prérequis
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    DISCOVERY SERVICE                                  │
-│                   (Eureka Server)                                    │
-│                   Port: 8761                                         │
-│                                                                      │
-│  Service Registry - Enregistrement de tous les microservices        │
-└────────────────────┬────────────────────────────────────────────────┘
-                     │
-                     │ Service Registry
-                     │
-    ┌────────────────┴────────────────┬─────────────────┬──────────────┐
-    │                                 │                 │              │
-    ▼                                 ▼                 ▼              ▼
-┌───────────────┐          ┌────────────────┐   ┌──────────────┐  ┌──────────────┐
-│   CUSTOMER    │          │   INVENTORY    │   │   BILLING    │  │    GATEWAY   │
-│   SERVICE     │          │    SERVICE     │   │   SERVICE    │  │   SERVICE    │
-│               │          │                │   │              │  │              │
-│  Port: 8081   │          │  Port: 8082    │   │  Port: 8083   │  │  Port: 8888   │
-│               │          │                │   │              │  │              │
-│  ┌─────────┐  │          │  ┌──────────┐  │   │  ┌─────────┐ │  │  Routage des │
-│  │ H2 DB   │  │          │  │  H2 DB   │  │   │  │ H2 DB   │ │  │  requêtes    │
-│  │customers│  │          │  │ products │  │   │  │ bills   │ │  │              │
-│  └─────────┘  │          │  └──────────┘  │   │  └─────────┘ │  │  ┌─────────┐ │
-│               │          │                │   │              │  │  │ Filters │ │
-│  REST API     │          │   REST API     │   │  REST API    │  │  │ Routing │ │
-│  /api/        │          │   /api/        │   │  /api/       │  │  └─────────┘ │
-│  customers    │          │   products     │   │  bills       │  │              │
-└───────────────┘          └────────────────┘   └──────────────┘  └──────────────┘
-        │                         │                      │              │
-        │                         │                      │              │
-        └─────────────────────────┴──────────────────────┴──────────────┘
-                                  │
-                                  ▼
-                          ┌──────────────┐
-                          │   Clients    │
-                          │  (Browser,   │
-                          │   Postman)   │
-                          └──────────────┘
-
-┌─────────────────────────────────────────────────────────────────────┐
-│                    CONFIG SERVICE                                    │
-│                   (Config Server)                                    │
-│                   Port: 9999                                         │
-│                                                                      │
-│  Configuration centralisée depuis config-repo/                      │
-│  (Optionnel - les services peuvent fonctionner sans)                │
-└────────────────────┬────────────────────────────────────────────────┘
-                     │
-                     │ Configuration
-                     │
-        ┌────────────┴────────────┬─────────────────┬──────────────┐
-        ▼                         ▼                  ▼              ▼
-┌───────────────┐          ┌────────────────┐   ┌──────────────┐  ┌──────────────┐
-│   CUSTOMER    │          │   INVENTORY    │   │   BILLING    │  │    GATEWAY   │
-│   SERVICE     │          │    SERVICE     │   │   SERVICE    │  │   SERVICE    │
-└───────────────┘          └────────────────┘   └──────────────┘  └──────────────┘
-```
-
-### 📊 Microservices du Projet
-
-| Service | Port | Description | Base de données |
-|---------|------|-------------|-----------------|
-| **Discovery Service** | 8761 | Eureka Server - Registre de services | - |
-| **Config Service** | 9999 | Configuration centralisée (optionnel) | - |
-| **Customer Service** | 8081 | Gestion des clients | H2 (customers-db) |
-| **Inventory Service** | 8082 | Gestion des produits | H2 (products-db) |
-| **Billing Service** | 8083 | Gestion des factures (utilise OpenFeign) | H2 (bills-db) |
-| **Gateway Service** | 8888 | API Gateway - Point d'entrée unique | - |
-
-### 🔄 Flux de Communication
-
-1. **Discovery Service** → Tous les services s'y enregistrent au démarrage
-2. **Config Service** → Fournit la configuration centralisée (optionnel)
-3. **Gateway Service** → Interroge Eureka pour découvrir les services disponibles
-4. **Customer/Inventory/Billing Services** → S'enregistrent automatiquement sur Eureka
-5. **Billing Service** → Utilise OpenFeign pour appeler Customer et Inventory Services
-6. **Clients** → Accèdent aux services via Gateway (port 8888) ou directement
+- **Java** : JDK 17 ou supérieur
+- **Maven** : 3.6+
+- **Node.js** : v18+ et npm
+- **Git** : Pour cloner le config-repo
 
 ---
 
-## 🚀 Comment Lancer les Microservices
+## Lancement de l'Application
 
-### ⚠️ Ordre de Démarrage IMPORTANT
+### Option 1 : Script Automatique (Recommandé)
 
-**Respectez cet ordre pour éviter les erreurs de connexion:**
-
-```
-1️⃣ DiscoveryServiceApplication  (Port 8761) 
-   ⏱️ Attendez 30 secondes qu'il démarre complètement
-
-2️⃣ ConfigServiceApplication     (Port 9999) - Optionnel
-   ⏱️ Attendez 10 secondes
-
-3️⃣ CustomerServiceApplication   (Port 8081) } 
-   InventoryServiceApplication   (Port 8082) } En parallèle
-   BillingServiceApplication     (Port 8083) } possible
-
-4️⃣ GatewayServiceApplication    (Port 8888)
-   ⏱️ Attendez 20 secondes que les autres services soient enregistrés
-```
-
----
-
-### Méthode 1: Via IntelliJ IDEA (Recommandé)
-
-#### 1. **Importer le projet**
-```
-File → Open → Sélectionnez le dossier Microservices_App
-```
-
-#### 2. **Recharger Maven**
-```
-Clic droit sur pom.xml → Maven → Reload Project
-```
-
-#### 3. **Lancer les services**
-
-**Option A: Lancement individuel**
-- Ouvrez **Run → Edit Configurations...**
-- Lancez chaque service dans l'ordre indiqué ci-dessus
-- OU utilisez la configuration **"All Microservices"** pour tout démarrer d'un coup
-
-**Option B: Configuration "All Microservices"**
-- Dans la liste des configurations, sélectionnez **"All Microservices"**
-- Cliquez sur ▶️ pour démarrer tous les services en une fois
-
----
-
-### Méthode 2: Via Ligne de Commande Maven
-
-#### 1. **Build du projet**
 ```bash
-cd Microservices_App
-mvn clean install -DskipTests
+.\start-all.bat
 ```
 
-#### 2. **Lancer les services dans des terminaux séparés**
+Le script lance automatiquement tous les services dans l'ordre correct avec les délais appropriés.
 
-**Terminal 1 - Discovery Service:**
-```bash
-cd discovery-service
-mvn spring-boot:run
-```
+### Option 2 : Lancement Manuel
 
-**Terminal 2 - Config Service (Optionnel):**
 ```bash
+# 1. Config Service (attendre 15s)
 cd config-service
 mvn spring-boot:run
-```
 
-**Terminal 3 - Customer Service:**
-```bash
-cd customer-service
+# 2. Discovery Service (attendre 20s)
+cd discovery-service
 mvn spring-boot:run
-```
 
-**Terminal 4 - Inventory Service:**
-```bash
-cd inventory-service
-mvn spring-boot:run
-```
-
-**Terminal 5 - Billing Service:**
-```bash
-cd billing-service
-mvn spring-boot:run
-```
-
-**Terminal 6 - Gateway Service:**
-```bash
+# 3. Gateway Service (attendre 20s)
 cd gateway-service
 mvn spring-boot:run
+
+# 4. Customer Service
+cd customer-service
+mvn spring-boot:run
+
+# 5. Inventory Service
+cd inventory-service
+mvn spring-boot:run
+
+# 6. Billing Service
+cd billing-service
+mvn spring-boot:run
+
+# 7. Frontend Angular
+cd frontend
+npm start
 ```
 
 ---
 
-### Méthode 3: Via JARs Compilés
+## URLs Importantes
+
+| Service/Interface | URL | Description |
+|-------------------|-----|-------------|
+| **Frontend** | `http://localhost:PORT` | Interface utilisateur (voir terminal pour le port exact) |
+| **Eureka Dashboard** | http://localhost:8761 | Monitoring des services |
+| **Gateway** | http://localhost:8888 | Point d'entrée API |
+| **Gateway Health** | http://localhost:8888/actuator/health | Santé du Gateway |
+
+### Endpoints Backend (via Gateway)
+
+```
+# Clients
+http://localhost:8888/CUSTOMER-SERVICE/api/customers
+
+# Produits
+http://localhost:8888/INVENTORY-SERVICE/api/products
+
+# Factures
+http://localhost:8888/BILLING-SERVICE/api/bills
+```
+
+---
+
+## Données de Test
+
+L'application contient des données de démonstration :
+
+### Customers (3)
+- Mohammed (mohammed@gmail.com)
+- Larbi (Larbi@gmail.com)
+- Oussama (Oussama@gmail.com)
+
+### Products (3)
+- Computer - $6500.00 (321 unités)
+- Printer - $5400.00 (19 unités)
+- Smart Phone - $4300.00 (14 unités)
+
+---
+
+## Vérification du Démarrage
+
+### 1. Vérifier Eureka
+
+Ouvrir http://localhost:8761
+
+**Attendu** : Voir 4-5 services enregistrés comme **UP** :
+- GATEWAY-SERVICE
+- CUSTOMER-SERVICE
+- INVENTORY-SERVICE
+- BILLING-SERVICE
+
+### 2. Vérifier le Frontend
+
+Consulter la fenêtre terminal "**Frontend Angular 18**" pour trouver l'URL :
+
+```
+➜ Local: http://localhost:XXXXX/
+```
+
+Ouvrir cette URL dans le navigateur.
+
+**Attendu** :
+- Dashboard avec statistiques (3 customers, 3 products)
+- Navigation sidebar fonctionnelle
+- Pas d'erreurs CORS dans la console
+
+---
+
+## Structure du Projet
+
+```
+Microservices_App/
+├── config-service/          # Configuration centralisée
+├── discovery-service/        # Eureka Server
+├── gateway-service/          # API Gateway + CORS
+├── customer-service/         # Microservice Clients
+├── inventory-service/        # Microservice Produits
+├── billing-service/          # Microservice Factures
+├── frontend/                 # Application Angular 18
+├── config-repo/              # Repository de configuration
+├── start-all.bat            # Script de lancement automatique
+└── README.md                # Ce fichier
+```
+
+---
+
+## Technologies Utilisées
+
+### Backend
+- **Spring Boot** 3.3.x
+- **Spring Cloud**
+  - Config Server
+  - Eureka Discovery
+  - Gateway
+- **Spring Data REST**
+- **H2 Database** (en mémoire)
+- **Feign Client** (pour communication inter-services)
+
+### Frontend
+- **Angular** 18.2.0
+- **TypeScript** 5.5.x
+- **RxJS** 7.8.x
+- **CSS** Vanilla (design moderne)
+
+---
+
+## Configuration CORS
+
+Le Gateway est configuré pour accepter les requêtes depuis n'importe quel port localhost (développement) :
+
+```java
+// gateway-service/src/main/java/org/saad/gatewayservice/config/CorsConfig.java
+corsConfig.setAllowedOriginPatterns(
+    Collections.singletonList("http://localhost:*")
+);
+```
+
+---
+
+## Résolution de Problèmes
+
+### Port Déjà Utilisé
 
 ```bash
-# Build
-mvn clean package -DskipTests
+# Trouver le processus utilisant un port
+netstat -ano | findstr :8081
 
-# Lancement (dans l'ordre)
-java -jar discovery-service/target/discovery-service-0.0.1-SNAPSHOT.jar
-java -jar config-service/target/config-service-0.0.1-SNAPSHOT.jar
-java -jar customer-service/target/customer-service-0.0.1-SNAPSHOT.jar
-java -jar inventory-service/target/inventory-service-0.0.1-SNAPSHOT.jar
-java -jar billing-service/target/billing-service-0.0.1-SNAPSHOT.jar
-java -jar gateway-service/target/gateway-service-0.0.1-SNAPSHOT.jar
+# Arrêter le processus
+taskkill /F /PID [process-id]
 ```
+
+### Frontend - Port Dynamique
+
+Angular CLI assigne automatiquement un port disponible. Consultez toujours la sortie terminal pour l'URL exacte.
+
+### Services Non Enregistrés dans Eureka
+
+Attendez 30-60 secondes (heartbeat interval). Si le problème persiste :
+1. Vérifiez que Discovery Service est démarré
+2. Vérifiez les logs du service concerné
 
 ---
 
-## 🌐 URLs et Points d'Accès
+## Développement
 
-### 📊 Eureka Dashboard (Service Discovery)
-```
-http://localhost:8761
-```
-👉 Visualisez tous les services enregistrés et leur statut
-
----
-
-### 🔗 Accès VIA le Gateway (Port 8888) - Recommandé
+### Compilation d'un Service
 
 ```bash
-# Customer Service
-http://localhost:8888/customer-service/api/customers
-http://localhost:8888/customer-service/api/customers/{id}
-
-# Inventory Service
-http://localhost:8888/inventory-service/api/products
-http://localhost:8888/inventory-service/api/products/{uuid}
-
-# Billing Service
-http://localhost:8888/billing-service/api/bills
-http://localhost:8888/billing-service/api/bills/{id}
+cd [service-name]
+mvn clean compile
 ```
 
----
-
-### 🔗 Accès DIRECT aux Services (Sans Gateway)
+### Tests
 
 ```bash
-# Customer Service (Port 8081)
-http://localhost:8081/api/customers
-http://localhost:8081/api/customers/{id}
+mvn test
+```
 
-# Inventory Service (Port 8082)
-http://localhost:8082/api/products
-http://localhost:8082/api/products/{uuid}
+### Package
 
-# Billing Service (Port 8083)
-http://localhost:8083/api/bills
-http://localhost:8083/api/bills/{id}
-
-# Config Service (Port 9999)
-http://localhost:9999/{application}/{profile}
-# Exemple: http://localhost:9999/billing-service/default
+```bash
+mvn clean package
 ```
 
 ---
 
-## 💾 Bases de Données H2
+## Auteur
 
-### Customer Service Database
-- **Console:** `http://localhost:8081/h2-console`
-- **JDBC URL:** `jdbc:h2:mem:customers-db`
-- **Username:** `sa`
-- **Password:** *(vide)*
-
-### Inventory Service Database
-- **Console:** `http://localhost:8082/h2-console`
-- **JDBC URL:** `jdbc:h2:mem:products-db`
-- **Username:** `sa`
-- **Password:** *(vide)*
-
-### Billing Service Database
-- **Console:** `http://localhost:8083/h2-console`
-- **JDBC URL:** `jdbc:h2:mem:bills-db`
-- **Username:** `sa`
-- **Password:** *(vide)*
+**Saad** (org.saad)
 
 ---
 
-## 🛠️ Technologies Utilisées
+## License
 
-- **Java 21** (LTS)
-- **Spring Boot 3.3.5**
-- **Spring Cloud 2023.0.3**
-- **Spring Cloud Netflix Eureka** (Service Discovery)
-- **Spring Cloud Gateway** (API Gateway)
-- **Spring Cloud Config Server** (Configuration centralisée)
-- **Spring Cloud OpenFeign** (Communication inter-services)
-- **Spring Data JPA & REST** (Persistence et APIs)
-- **H2 Database** (Base de données en mémoire)
-- **Maven** (Gestion des dépendances)
-
----
-
-## ✅ Prérequis
-
-- ☕ **Java 21** ou supérieur
-- 📦 **Maven 3.6+** (ou utilisez le wrapper Maven inclus: `mvnw`)
-- 💻 **IDE**: IntelliJ IDEA (recommandé), Eclipse, ou VS Code
-- 🌐 **Ports disponibles:** 8761, 8081, 8082, 8083, 8888, 9999
-
----
-
-## 🎯 Fonctionnalités
-
-- ✅ **Service Discovery** avec Eureka Server
-- ✅ **API Gateway** avec routage dynamique
-- ✅ **Config Server** pour configuration centralisée
-- ✅ **Customer Service** - Gestion des clients
-- ✅ **Inventory Service** - Gestion des produits
-- ✅ **Billing Service** - Gestion des factures (utilise OpenFeign)
-- ✅ **Bases de données H2** pour chaque service
-- ✅ **REST APIs** avec Spring Data REST (HATEOAS)
-- ✅ **Enregistrement automatique** sur Eureka
-- ✅ **Load Balancing** automatique
-- ✅ **Health Checks** avec Actuator
-
----
-
-## 📝 Notes Importantes
-
-1. **Ordre de démarrage:** Toujours démarrer Discovery Service en premier!
-2. **Temps de démarrage:** Chaque service met ~20-30 secondes à démarrer
-3. **Enregistrement Eureka:** Les services mettent ~30 secondes supplémentaires à s'enregistrer
-4. **Billing Service:** Génère automatiquement des factures au démarrage en appelant Customer et Inventory Services via OpenFeign
-5. **Config Service:** Optionnel - les services peuvent fonctionner sans, mais utilisent la configuration locale par défaut
-
----
-
-**🎉 Bon développement avec les microservices!**
-
+Ce projet est à des fins éducatives.

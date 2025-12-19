@@ -23,47 +23,25 @@ public class InventoryServiceApplication {
 		return args -> {
 			productRepository.save(Product.builder()
 					.id(UUID.randomUUID().toString())
-					.name("MacBook Pro 16-inch")
-					.price(2499.99)
-					.quantity(45)
+					.name("Computer")
+					.price(6500)
+					.quantity(321)
 					.build());
 			productRepository.save(Product.builder()
 					.id(UUID.randomUUID().toString())
-					.name("Sony WH-1000XM5 Headphones")
-					.price(399.99)
-					.quantity(128)
+					.name("Printer")
+					.price(5400)
+					.quantity(19)
 					.build());
 			productRepository.save(Product.builder()
 					.id(UUID.randomUUID().toString())
-					.name("Samsung Galaxy S24 Ultra")
-					.price(1299.00)
-					.quantity(67)
-					.build());
-			productRepository.save(Product.builder()
-					.id(UUID.randomUUID().toString())
-					.name("LG UltraWide Monitor 34-inch")
-					.price(599.50)
-					.quantity(32)
-					.build());
-			productRepository.save(Product.builder()
-					.id(UUID.randomUUID().toString())
-					.name("Logitech MX Master 3S Mouse")
-					.price(99.99)
-					.quantity(215)
-					.build());
-			productRepository.save(Product.builder()
-					.id(UUID.randomUUID().toString())
-					.name("iPad Pro 12.9-inch")
-					.price(1099.00)
-					.quantity(89)
+					.name("Smart Phone")
+					.price(4300)
+					.quantity(14)
 					.build());
 
 			productRepository.findAll().forEach(p->{
-				System.out.println("========================================");
-				System.out.println("Product: " + p.getName());
-				System.out.println("Price: $" + p.getPrice());
-				System.out.println("Stock: " + p.getQuantity() + " units");
-				System.out.println("========================================");
+				System.out.println(p.toString());
 			});
 		};
 	}

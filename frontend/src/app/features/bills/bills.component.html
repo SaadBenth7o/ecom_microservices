@@ -1,0 +1,27 @@
+<app-header title="Bills"></app-header>
+
+<div class="bills-container">
+    <div class="loading" *ngIf="loading">Loading bills...</div>
+
+    <div class="table-container" *ngIf="!loading">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Customer ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let bill of bills">
+                    <td>{{ bill.id }}</td>
+                    <td>{{ bill.billingDate | date }}</td>
+                    <td>{{ bill.customerId }}</td>
+                </tr>
+                <tr *ngIf="bills.length === 0">
+                    <td colspan="3" class="no-data">No bills found</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

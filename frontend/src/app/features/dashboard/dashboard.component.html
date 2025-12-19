@@ -1,0 +1,43 @@
+<app-header title="Dashboard"></app-header>
+
+<div class="dashboard">
+    <div class="loading" *ngIf="loading">Loading...</div>
+
+    <div class="stats-grid" *ngIf="!loading">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-number">{{ stats.customers }}</div>
+            <div class="stat-label">Customers</div>
+            <a routerLink="/customers" class="stat-link">View all →</a>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📦</div>
+            <div class="stat-number">{{ stats.products }}</div>
+            <div class="stat-label">Products</div>
+            <a routerLink="/products" class="stat-link">View all →</a>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📄</div>
+            <div class="stat-number">{{ stats.bills }}</div>
+            <div class="stat-label">Bills</div>
+            <a routerLink="/bills" class="stat-link">View all →</a>
+        </div>
+    </div>
+
+    <div class="quick-actions" *ngIf="!loading">
+        <h2>Quick Actions</h2>
+        <div class="actions-list">
+            <a routerLink="/customers" class="action-button">
+                <span>👥</span> Browse Customers
+            </a>
+            <a routerLink="/products" class="action-button">
+                <span>📦</span> Browse Products
+            </a>
+            <a routerLink="/bills" class="action-button">
+                <span>📄</span> View Bills
+            </a>
+        </div>
+    </div>
+</div>

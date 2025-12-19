@@ -1,0 +1,15 @@
+<app-header title="Products"></app-header>
+
+<div class="products-container">
+    <div class="loading" *ngIf="loading">Loading products...</div>
+
+    <div class="products-grid" *ngIf="!loading">
+        <div class="product-card" *ngFor="let product of products">
+            <div class="product-icon">📦</div>
+            <h3>{{ product.name }}</h3>
+            <div class="product-price">$ {{ product.price.toFixed(2) }}</div>
+            <div class="product-quantity">Stock: {{ product.quantity }} units</div>
+        </div>
+        <div class="no-data" *ngIf="products.length === 0">No products available</div>
+    </div>
+</div>
