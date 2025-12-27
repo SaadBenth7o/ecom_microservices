@@ -56,7 +56,7 @@ Application e-commerce complète utilisant une architecture microservices avec S
 
 ## Prérequis
 
-- **Java** : JDK 17 ou supérieur
+- **Java** : JDK 21 ou supérieur
 - **Maven** : 3.6+
 - **Node.js** : v18+ et npm
 - **Git** : Pour cloner le config-repo
@@ -197,7 +197,7 @@ Microservices_App/
 ## Technologies Utilisées
 
 ### Backend
-- **Spring Boot** 3.3.x
+- **Spring Boot** 3.3.5
 - **Spring Cloud**
   - Config Server
   - Eureka Discovery
