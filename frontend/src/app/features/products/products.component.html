@@ -1,15 +1,94 @@
-<app-header title="Products"></app-header>
+<app-header title="Gestion des Produits"></app-header>
 
 <div class="products-container">
-    <div class="loading" *ngIf="loading">Loading products...</div>
+  <div class="header-actions">
+    <button class="btn btn-primary" (click)="openCreateForm()">+ Nouveau Produit</button>
+  </div>
 
-    <div class="products-grid" *ngIf="!loading">
-        <div class="product-card" *ngFor="let product of products">
-            <div class="product-icon">📦</div>
-            <h3>{{ product.name }}</h3>
-            <div class="product-price">$ {{ product.price.toFixed(2) }}</div>
-            <div class="product-quantity">Stock: {{ product.quantity }} units</div>
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Formulaire Modal -->
+  <div class="modal-overlay" *ngIf="showForm" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editingProduct ? 'Modifier le Produit' : 'Nouveau Produit' }}</h2>
+        <button class="close-btn" (click)="closeForm()">&times;</button>
+      </div>
+      <form [formGroup]="productForm" (ngSubmit)="saveProduct()">
+        <div class="form-group">
+          <label>Nom du Produit *</label>
+          <input type="text" formControlName="name" class="form-control" [class.invalid]="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+          <div class="error-text" *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+            {{ getFieldError('name') }}
+          </div>
         </div>
-        <div class="no-data" *ngIf="products.length === 0">No products available</div>
+        <div class="form-group">
+          <label>Client *</label>
+          <select formControlName="customerId" class="form-control" [class.invalid]="productForm.get('customerId')?.invalid && productForm.get('customerId')?.touched">
+            <option value="">Sélectionner un client</option>
+            <option *ngFor="let customer of customers" [value]="customer.id">{{ customer.name }} ({{ customer.email }})</option>
+          </select>
+          <div class="error-text" *ngIf="productForm.get('customerId')?.invalid && productForm.get('customerId')?.touched">
+            Le client est obligatoire
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prix *</label>
+            <input type="number" step="0.01" formControlName="price" class="form-control" [class.invalid]="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+            <div class="error-text" *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+              {{ getFieldError('price') }}
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Quantité *</label>
+            <input type="number" formControlName="quantity" class="form-control" [class.invalid]="productForm.get('quantity')?.invalid && productForm.get('quantity')?.touched">
+            <div class="error-text" *ngIf="productForm.get('quantity')?.invalid && productForm.get('quantity')?.touched">
+              {{ getFieldError('quantity') }}
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeForm()">Annuler</button>
+          <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">Enregistrer</button>
+        </div>
+      </form>
     </div>
+  </div>
+
+  <!-- Liste des Produits -->
+  <div class="loading" *ngIf="loading">Chargement des produits...</div>
+
+  <div class="table-container" *ngIf="!loading">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Client</th>
+          <th>Prix</th>
+          <th>Quantité</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.customerName || 'N/A' }}</td>
+          <td>{{ product.price | number:'1.2-2' }} €</td>
+          <td>{{ product.quantity }}</td>
+          <td class="actions">
+            <button class="btn btn-sm btn-edit" (click)="openEditForm(product)">Modifier</button>
+            <button class="btn btn-sm btn-delete" (click)="deleteProduct(product.id!)">Supprimer</button>
+          </td>
+        </tr>
+        <tr *ngIf="products.length === 0">
+          <td colspan="6" class="no-data">Aucun produit trouvé</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

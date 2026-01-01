@@ -1,11 +1,7 @@
 export interface Customer {
-    id: number;
+    id?: number;
     name: string;
     email: string;
-    _links?: {
-        self: { href: string };
-        customer: { href: string; templated?: boolean };
-    };
 }
 
 export interface PagedResponse<T> {

@@ -24,7 +24,9 @@ public class SecurityConfig {
                         .pathMatchers("/actuator/**").permitAll()
                         .pathMatchers("/eureka/**").permitAll()
                         // Allow internal access from chatbot/MCP to service APIs
-                        .pathMatchers("/**/api/**").permitAll()
+                        .pathMatchers("/CUSTOMER-SERVICE/api/**").permitAll()
+                        .pathMatchers("/INVENTORY-SERVICE/api/**").permitAll()
+                        .pathMatchers("/BILLING-SERVICE/api/**").permitAll()
                         // All other requests require authentication
                         .anyExchange().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2

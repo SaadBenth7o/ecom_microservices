@@ -1,0 +1,32 @@
+<app-header></app-header>
+
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Kafka Streaming Dashboard</h1>
+    <p>Real-time monitoring of Kafka events</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!error" class="chart-container">
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color billing"></div>
+        <span class="legend-label">Événements Billing (Factures créées)</span>
+        <span class="legend-description">Monte quand vous créez une facture</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color supplier"></div>
+        <span class="legend-label">Événements Supplier (Commandes fournisseur)</span>
+        <span class="legend-description">Monte quand Supplier Service traite une facture</span>
+      </div>
+    </div>
+    <canvas id="kafkaChart" width="1200" height="500"></canvas>
+    <div class="chart-info">
+      <p>📊 Le graphique montre le nombre d'événements dans les <strong>10 dernières secondes</strong></p>
+      <p>💡 <strong>Flux Kafka</strong> : Billing Service → billing-events → Supplier Service → supplier-orders → Data Analytics</p>
+    </div>
+  </div>
+</div>

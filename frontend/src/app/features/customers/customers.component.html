@@ -1,27 +1,71 @@
-<app-header title="Customers"></app-header>
+<app-header title="Gestion des Clients"></app-header>
 
 <div class="customers-container">
-    <div class="loading" *ngIf="loading">Loading customers...</div>
+  <div class="header-actions">
+    <button class="btn btn-primary" (click)="openCreateForm()">+ Nouveau Client</button>
+  </div>
 
-    <div class="table-container" *ngIf="!loading">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let customer of customers">
-                    <td>{{ customer.id }}</td>
-                    <td>{{ customer.name }}</td>
-                    <td>{{ customer.email }}</td>
-                </tr>
-                <tr *ngIf="customers.length === 0">
-                    <td colspan="3" class="no-data">No customers found</td>
-                </tr>
-            </tbody>
-        </table>
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Formulaire Modal -->
+  <div class="modal-overlay" *ngIf="showForm" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ editingCustomer ? 'Modifier le Client' : 'Nouveau Client' }}</h2>
+        <button class="close-btn" (click)="closeForm()">&times;</button>
+      </div>
+      <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()">
+        <div class="form-group">
+          <label>Nom *</label>
+          <input type="text" formControlName="name" class="form-control" [class.invalid]="customerForm.get('name')?.invalid && customerForm.get('name')?.touched">
+          <div class="error-text" *ngIf="customerForm.get('name')?.invalid && customerForm.get('name')?.touched">
+            {{ getFieldError('name') }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" formControlName="email" class="form-control" [class.invalid]="customerForm.get('email')?.invalid && customerForm.get('email')?.touched">
+          <div class="error-text" *ngIf="customerForm.get('email')?.invalid && customerForm.get('email')?.touched">
+            {{ getFieldError('email') }}
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="closeForm()">Annuler</button>
+          <button type="submit" class="btn btn-primary" [disabled]="customerForm.invalid">Enregistrer</button>
+        </div>
+      </form>
     </div>
+  </div>
+
+  <!-- Liste des Clients -->
+  <div class="loading" *ngIf="loading">Chargement des clients...</div>
+
+  <div class="table-container" *ngIf="!loading">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let customer of customers">
+          <td>{{ customer.id }}</td>
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.email }}</td>
+          <td class="actions">
+            <button class="btn btn-sm btn-edit" (click)="openEditForm(customer)">Modifier</button>
+            <button class="btn btn-sm btn-delete" (click)="deleteCustomer(customer.id!)">Supprimer</button>
+          </td>
+        </tr>
+        <tr *ngIf="customers.length === 0">
+          <td colspan="4" class="no-data">Aucun client trouvé</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

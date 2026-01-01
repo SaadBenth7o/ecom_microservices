@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Product } from '../models/product.model';
-import { PagedResponse } from '../models/customer.model';
 
 @Injectable({
     providedIn: 'root'
@@ -14,12 +12,26 @@ export class ProductService {
     constructor(private api: ApiService) { }
 
     getAll(): Observable<Product[]> {
-        return this.api.get<PagedResponse<Product>>(this.serviceName, '/api/products').pipe(
-            map(response => response._embedded?.products || [])
-        );
+        return this.api.get<Product[]>(this.serviceName, '/api/products');
     }
 
-    getById(id: string): Observable<Product> {
+    getById(id: number): Observable<Product> {
         return this.api.get<Product>(this.serviceName, `/api/products/${id}`);
+    }
+
+    getByCustomer(customerId: number): Observable<Product[]> {
+        return this.api.get<Product[]>(this.serviceName, `/api/products/customer/${customerId}`);
+    }
+
+    create(product: Product): Observable<Product> {
+        return this.api.post<Product>(this.serviceName, '/api/products', product);
+    }
+
+    update(id: number, product: Product): Observable<Product> {
+        return this.api.put<Product>(this.serviceName, `/api/products/${id}`, product);
+    }
+
+    delete(id: number): Observable<void> {
+        return this.api.delete<void>(this.serviceName, `/api/products/${id}`);
     }
 }

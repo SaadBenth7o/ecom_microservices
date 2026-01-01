@@ -1,10 +1,8 @@
 export interface Product {
-    id: string;
+    id?: number;
     name: string;
     price: number;
     quantity: number;
-    _links?: {
-        self: { href: string };
-        product: { href: string };
-    };
+    customerId: number;
+    customerName?: string;
 }
