@@ -71,6 +71,12 @@ public class BillingServiceApplication {
 
 		@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 2000, multiplier = 2, maxDelay = 30000), retryFor = Exception.class)
 		public void initializeData() {
+			// Only initialize if no bills exist (avoid duplicates on restart)
+			if (billRepository.count() > 0) {
+				log.info("ℹ️ Données de facturation existantes, pas d'insertion");
+				return;
+			}
+
 			log.info("Attempting to initialize billing data...");
 
 			Collection<Customer> customers = customerRestClient.getAllCustomers().getContent();

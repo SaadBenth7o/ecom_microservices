@@ -14,28 +14,30 @@ public class CustomerServiceApplication {
         SpringApplication.run(CustomerServiceApplication.class, args);
     }
 
-
     @Bean
     CommandLineRunner commandLineRunner(CustomerRepository customerRepository) {
         return args -> {
-            customerRepository.save(Customer.builder()
-                    .name("Mohammed").email("mohammed@gmail.com").build());
-            customerRepository.save(Customer.builder()
-                    .name("Larbi").email("Larbi@gmail.com").build());
-            customerRepository.save(Customer.builder()
-                    .name("Oussama").email("Oussama@gmail.com").build());
-            customerRepository.findAll().forEach(c-> {
+            // Only insert data if the table is empty (avoid duplicates on restart)
+            if (customerRepository.count() == 0) {
+                customerRepository.save(Customer.builder()
+                        .name("Mohammed").email("mohammed@gmail.com").build());
+                customerRepository.save(Customer.builder()
+                        .name("Larbi").email("Larbi@gmail.com").build());
+                customerRepository.save(Customer.builder()
+                        .name("Oussama").email("Oussama@gmail.com").build());
+                System.out.println("✅ Données initiales des clients créées");
+            } else {
+                System.out.println("ℹ️ Données clients existantes, pas d'insertion");
+            }
+
+            customerRepository.findAll().forEach(c -> {
                 System.out.println("====================================");
                 System.out.println(c.getId());
                 System.out.println(c.getName());
                 System.out.println(c.getEmail());
                 System.out.println("====================================");
-
-
             });
 
         };
     }
 }
-
-

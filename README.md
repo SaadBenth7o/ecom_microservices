@@ -237,7 +237,7 @@ GET  /data-analytics-service/api/kafka/events
 
 ---
 
-## 🤖 Chatbot IA
+## 🤖 Chatbot IA (Telegram)
 
 ### Configuration
 Variables d'environnement requises:
@@ -246,11 +246,30 @@ GEMINI_KEY=your_gemini_api_key
 TELEGRAM_API_KEY=your_telegram_bot_token
 ```
 
+### Deux Modes de Fonctionnement
+
+Le chatbot propose **deux modes** via des boutons interactifs:
+
+| Mode | Description |
+|------|-------------|
+| 🗄️ **Base de Données** | Consultation clients, produits, factures via MCP Server |
+| 📋 **Politiques** | Questions sur retours, livraison, garanties (RAG) |
+
 ### Architecture MCP
-Le chatbot utilise le **Model Context Protocol** pour accéder aux données:
-- MCP Server expose les outils: `getCustomers`, `getProducts`, `getBills`
-- Le Chatbot interroge les services via MCP
-- Réponses générées par **Gemini AI**
+- **MCP Server** expose les outils: `getCustomers`, `getProducts`, `getBills`
+- Les réponses sont générées par **Gemini AI**
+
+### Mode RAG (Politiques d'Entreprise)
+Le mode Politiques utilise **Retrieval-Augmented Generation**:
+- Répond **uniquement** basé sur le document `policies.txt`
+- Contenu: Retours (14 jours), Livraison (25-50 MAD), Garanties (2 ans), CGV
+- Rejette les questions hors sujet
+
+---
+
+## 💰 Monnaie
+
+Tous les prix sont affichés en **Dirhams Marocains (MAD)**.
 
 ---
 

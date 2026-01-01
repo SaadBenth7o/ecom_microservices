@@ -1,0 +1,134 @@
+# POLITIQUES D'ENTREPRISE - E-Shop Maroc
+Document officiel - Janvier 2026
+
+================================================================================
+## 1. POLITIQUE DE RETOUR ET REMBOURSEMENT
+================================================================================
+
+### Délai de Retour
+Vous disposez d'un délai de 14 jours calendaires à compter de la réception de votre commande pour effectuer un retour. Ce délai est porté à 30 jours pour les membres du programme fidélité.
+
+### Conditions de Retour
+Pour être éligible au retour, le produit doit :
+- Être dans son emballage d'origine, non ouvert et non utilisé
+- Être accompagné de la facture d'achat originale
+- Ne pas être un produit personnalisé ou sur mesure
+- Ne pas être un produit périssable ou alimentaire
+
+### Procédure de Retour
+1. Connectez-vous à votre compte client sur notre site web
+2. Accédez à la section "Mes Commandes"
+3. Cliquez sur "Demander un retour" pour la commande concernée
+4. Imprimez l'étiquette de retour fournie
+5. Déposez le colis dans un point relais partenaire
+
+### Remboursement
+Le remboursement sera effectué sous 5 à 10 jours ouvrés après réception et vérification du produit retourné. Le remboursement sera effectué sur le même moyen de paiement utilisé lors de l'achat.
+
+### Frais de retour
+- Retour gratuit pour les commandes supérieures à 500 MAD
+- Frais forfaitaires de 35 MAD pour les commandes inférieures à 500 MAD
+- Retour gratuit en cas de produit défectueux ou erreur de notre part
+
+================================================================================
+## 2. CONDITIONS DE LIVRAISON
+================================================================================
+
+### Zones de Livraison
+Nous livrons dans tout le Royaume du Maroc, incluant :
+- Toutes les grandes villes (Casablanca, Rabat, Marrakech, Fès, Tanger, Agadir, etc.)
+- Zones rurales et périphériques (délais étendus)
+- Sahara marocain (Laâyoune, Dakhla)
+
+### Délais et Frais de Livraison
+| Type de Livraison | Délai | Coût |
+|-------------------|-------|------|
+| Standard | 3-5 jours ouvrés | 25 MAD |
+| Express | 24-48 heures | 50 MAD |
+| Point Relais | 4-7 jours ouvrés | 15 MAD |
+| Gratuite | 5-7 jours ouvrés | À partir de 300 MAD d'achat |
+
+### Suivi de Commande
+Un numéro de suivi vous sera envoyé par SMS et email dès l'expédition de votre commande. Vous pouvez suivre votre colis en temps réel depuis votre espace client.
+
+### Livraison Partielle
+Si votre commande contient plusieurs articles, certains peuvent être expédiés séparément selon leur disponibilité. Vous ne paierez qu'une seule fois les frais de livraison.
+
+================================================================================
+## 3. GARANTIES PRODUITS
+================================================================================
+
+### Garantie Légale de Conformité
+Conformément à la législation marocaine, tous nos produits bénéficient d'une garantie légale de conformité de 2 ans à compter de la date d'achat.
+
+### Garantie Constructeur
+En plus de la garantie légale, certains produits bénéficient d'une garantie constructeur étendue :
+- Électroménager : 2 à 5 ans selon le fabricant
+- High-Tech : 1 à 2 ans
+- Mobilier : 3 à 10 ans selon le produit
+- Textile : 6 mois
+
+### Exclusions de Garantie
+La garantie ne couvre pas :
+- Les dommages causés par une mauvaise utilisation
+- L'usure normale du produit
+- Les dommages causés par des accidents (chute, eau, etc.)
+- Les modifications effectuées par l'utilisateur
+
+### Procédure SAV
+Pour toute demande de garantie :
+1. Contactez notre service client au 08 00 00 12 34 (appel gratuit)
+2. Fournissez votre numéro de commande et la description du problème
+3. Un technicien vous contactera sous 48h pour diagnostic
+4. Réparation ou remplacement sous 10 jours ouvrés
+
+================================================================================
+## 4. CONDITIONS GÉNÉRALES DE VENTE (CGV)
+================================================================================
+
+### Identification du Vendeur
+- Raison sociale : E-Shop Maroc SARL
+- Siège social : 123 Boulevard Mohammed V, Casablanca
+- RC : 123456
+- ICE : 001234567890123
+- Téléphone : 05 22 12 34 56
+- Email : contact@eshop-maroc.ma
+
+### Prix et Paiement
+- Tous les prix sont affichés en Dirhams Marocains (MAD), TTC
+- La TVA applicable est de 20%
+- Moyens de paiement acceptés : Carte bancaire, PayPal, Virement, Paiement à la livraison (+ 10 MAD)
+- Le paiement est sécurisé par protocole SSL 256 bits
+
+### Propriété Intellectuelle
+Tout le contenu du site (textes, images, logos) est la propriété exclusive d'E-Shop Maroc SARL. Toute reproduction est strictement interdite.
+
+### Protection des Données Personnelles
+Conformément à la loi 09-08 relative à la protection des personnes physiques à l'égard du traitement des données à caractère personnel :
+- Vos données sont collectées uniquement pour le traitement de vos commandes
+- Vous disposez d'un droit d'accès, de rectification et de suppression
+- Vos données ne sont jamais vendues à des tiers
+- Conservation des données : 3 ans après la dernière commande
+
+### Litiges
+En cas de litige, une solution amiable sera recherchée en priorité. À défaut, les tribunaux de Casablanca seront seuls compétents.
+
+================================================================================
+## 5. SERVICE CLIENT
+================================================================================
+
+### Horaires de Contact
+- Du lundi au vendredi : 9h00 - 18h00
+- Samedi : 9h00 - 13h00
+- Dimanche et jours fériés : Fermé
+
+### Moyens de Contact
+- Téléphone : 08 00 00 12 34 (appel gratuit)
+- WhatsApp : +212 6 00 00 00 00
+- Email : support@eshop-maroc.ma
+- Chat en ligne : Disponible sur le site web
+
+================================================================================
+Document mis à jour le 1er Janvier 2026
+E-Shop Maroc SARL - Tous droits réservés
+================================================================================
