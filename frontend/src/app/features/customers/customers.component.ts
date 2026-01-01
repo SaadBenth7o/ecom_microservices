@@ -36,14 +36,34 @@ export class CustomersComponent implements OnInit {
 
   loadCustomers() {
     this.loading = true;
+    this.error = null;
+    
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/4d728488-9655-4fb7-9ad8-610057eb6692',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'customers.component.ts:37',message:'loadCustomers called',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+    // #endregion
+    
+    console.log('🔄 Loading customers...');
     this.customerService.getAll().subscribe({
       next: (data) => {
-        this.customers = data;
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/4d728488-9655-4fb7-9ad8-610057eb6692',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'customers.component.ts:42',message:'Customers loaded successfully',data:{count:data?.length||0,isEmpty:!data||data.length===0},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+        // #endregion
+        
+        console.log('✅ Customers loaded:', data);
+        this.customers = data || [];
         this.loading = false;
+        if (this.customers.length === 0) {
+          console.warn('⚠️ No customers found - database may be empty');
+        }
       },
       error: (err) => {
-        console.error('Error loading customers:', err);
-        this.error = 'Erreur lors du chargement des clients';
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/4d728488-9655-4fb7-9ad8-610057eb6692',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'customers.component.ts:52',message:'Error loading customers',data:{status:err.status,statusText:err.statusText,message:err.message,error:err.error},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:err.status===401?'B':err.status===404?'C':err.status===0?'D':'E'})}).catch(()=>{});
+        // #endregion
+        
+        console.error('❌ Error loading customers:', err);
+        console.error('📊 Status:', err.status);
+        this.error = `Erreur lors du chargement des clients (${err.status || 'Network Error'})`;
         this.loading = false;
       }
     });

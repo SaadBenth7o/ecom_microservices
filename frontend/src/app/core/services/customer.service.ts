@@ -7,7 +7,7 @@ import { Customer } from '../models/customer.model';
     providedIn: 'root'
 })
 export class CustomerService {
-    private serviceName = 'CUSTOMER-SERVICE';
+    private serviceName = 'customer-service';
 
     constructor(private api: ApiService) { }
 

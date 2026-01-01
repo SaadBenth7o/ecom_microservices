@@ -7,7 +7,7 @@ import { Bill } from '../models/bill.model';
     providedIn: 'root'
 })
 export class BillingService {
-    private serviceName = 'BILLING-SERVICE';
+    private serviceName = 'billing-service';
 
     constructor(private api: ApiService) { }
 

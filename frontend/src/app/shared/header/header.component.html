@@ -1,3 +1,7 @@
 <header class="header">
     <h1>{{ title }}</h1>
+    <div class="user-info" *ngIf="username">
+        <span class="username">{{ username }}</span>
+        <button (click)="logout()" class="logout-btn">Déconnexion</button>
+    </div>
 </header>

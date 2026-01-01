@@ -7,7 +7,7 @@ import { Product } from '../models/product.model';
     providedIn: 'root'
 })
 export class ProductService {
-    private serviceName = 'INVENTORY-SERVICE';
+    private serviceName = 'inventory-service';
 
     constructor(private api: ApiService) { }
 

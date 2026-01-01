@@ -25,8 +25,16 @@ public class CorsConfig {
         // Autoriser toutes les méthodes HTTP
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 
-        // Autoriser tous les headers
-        corsConfig.setAllowedHeaders(Collections.singletonList("*"));
+        // Autoriser tous les headers (y compris Authorization pour JWT)
+        corsConfig.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With",
+                "Accept",
+                "Origin",
+                "Access-Control-Request-Method",
+                "Access-Control-Request-Headers"
+        ));
 
         // Permettre l'envoi des credentials (cookies, auth headers)
         corsConfig.setAllowCredentials(true);

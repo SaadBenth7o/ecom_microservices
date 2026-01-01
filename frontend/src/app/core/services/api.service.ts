@@ -12,8 +12,16 @@ export class ApiService {
 
     get<T>(serviceName: string, endpoint: string): Observable<T> {
         const url = `${this.baseUrl}/${serviceName}${endpoint}`;
+        
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/4d728488-9655-4fb7-9ad8-610057eb6692',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.service.ts:14',message:'API GET request',data:{url,serviceName,endpoint,baseUrl:this.baseUrl},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
+        // #endregion
+        
         console.log('GET:', url);
-        return this.http.get<T>(url);
+        return this.http.get<T>(url, {
+            observe: 'body',
+            responseType: 'json' as any
+        });
     }
 
     post<T>(serviceName: string, endpoint: string, body: any): Observable<T> {

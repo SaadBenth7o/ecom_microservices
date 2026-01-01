@@ -54,9 +54,12 @@ export class ProductsComponent implements OnInit {
 
   loadProducts() {
     this.loading = true;
+    this.error = null;
+    console.log('🔄 Loading products...');
     this.productService.getAll().subscribe({
       next: (data) => {
-        this.products = data;
+        console.log('✅ Products loaded:', data);
+        this.products = data || [];
         // Enrichir avec les noms des clients
         this.products.forEach(product => {
           const customer = this.customers.find(c => c.id === product.customerId);
@@ -65,10 +68,18 @@ export class ProductsComponent implements OnInit {
           }
         });
         this.loading = false;
+        if (this.products.length === 0) {
+          console.warn('⚠️ No products found - database may be empty');
+        }
       },
       error: (err) => {
-        console.error('Error loading products:', err);
-        this.error = 'Erreur lors du chargement des produits';
+        console.error('❌ Error loading products:', err);
+        console.error('📊 Status:', err.status);
+        console.error('💬 Message:', err.message);
+        if (err.error) {
+          console.error('📄 Error details:', err.error);
+        }
+        this.error = `Erreur lors du chargement des produits (${err.status || 'Network Error'})`;
         this.loading = false;
       }
     });

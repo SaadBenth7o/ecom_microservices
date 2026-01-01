@@ -73,14 +73,25 @@ export class BillsComponent implements OnInit {
 
   loadBills() {
     this.loading = true;
+    this.error = null;
+    console.log('🔄 Loading bills...');
     this.billingService.getAll().subscribe({
       next: (data) => {
-        this.bills = data;
+        console.log('✅ Bills loaded:', data);
+        this.bills = data || [];
         this.loading = false;
+        if (this.bills.length === 0) {
+          console.warn('⚠️ No bills found - database may be empty');
+        }
       },
       error: (err) => {
-        console.error('Error loading bills:', err);
-        this.error = 'Erreur lors du chargement des factures';
+        console.error('❌ Error loading bills:', err);
+        console.error('📊 Status:', err.status);
+        console.error('💬 Message:', err.message);
+        if (err.error) {
+          console.error('📄 Error details:', err.error);
+        }
+        this.error = `Erreur lors du chargement des factures (${err.status || 'Network Error'})`;
         this.loading = false;
       }
     });
