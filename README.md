@@ -1,6 +1,3 @@
-## 👤 Auteur
-
-**Saad Bendahou**
 # 🛒 E-Commerce Microservices Application
 
 Application e-commerce complète avec architecture microservices Spring Boot, Keycloak, Kafka et chatbot IA.
@@ -119,12 +116,20 @@ Réponse JSON de l'endpoint `/api/bills`:
 
 Bot Telegram intégré avec Gemini AI pour assistance client.
 
-### Conversation avec le Bot
-Exemples d'interactions avec le chatbot:
+### Conversations avec le Bot
 
-![Telegram Bot - Conversation 1](docs/images/16_telegram_bot_1.jpg)
-
-![Telegram Bot - Conversation 2](docs/images/17_telegram_bot_2.jpg)
+<div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+  <div style="flex: 1; min-width: 300px; max-width: 400px;">
+    <p><strong>Requête basée sur les bases de données MCP</strong></p>
+    <p>Le bot interroge les microservices Billing, Customer et Inventory via MCP (Model Context Protocol) pour répondre aux questions sur les données de l'application.</p>
+    <img src="docs/images/16_telegram_bot_1.jpg" alt="Telegram Bot - MCP Database Query" style="width: 100%; height: auto; border-radius: 8px;">
+  </div>
+  <div style="flex: 1; min-width: 300px; max-width: 400px;">
+    <p><strong>Requête basée sur RAG (Retrieval Augmented Generation)</strong></p>
+    <p>Le bot utilise RAG pour répondre aux questions basées sur le fichier de politique interne de l'entreprise, permettant des réponses contextuelles précises.</p>
+    <img src="docs/images/17_telegram_bot_2.jpg" alt="Telegram Bot - RAG Policy Query" style="width: 100%; height: auto; border-radius: 8px;">
+  </div>
+</div>
 
 ---
 
@@ -157,6 +162,8 @@ Exemples d'interactions avec le chatbot:
 
 ---
 
+## 👤 Auteur
 
+**Saad Bendahou**
 
-
+*Janvier 2026*
