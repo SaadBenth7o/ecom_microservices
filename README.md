@@ -1,8 +1,130 @@
+## 👤 Auteur
+
+**Saad Bendahou**
 # 🛒 E-Commerce Microservices Application
 
-Application e-commerce complète avec architecture microservices sécurisée par Keycloak.
+Application e-commerce complète avec architecture microservices Spring Boot, Keycloak, Kafka et chatbot IA.
 
-![Architecture](goalARCHI.jpg)
+---
+
+## 📐 Architecture
+
+Diagramme de l'architecture globale du système:
+
+![Architecture du Système](docs/images/00_architecture.jpg)
+
+---
+
+## 🗄️ Bases de Données H2
+
+Les microservices utilisent des bases de données H2 en mémoire pour le développement.
+
+### Customer Database
+Console H2 du service Customer montrant la table des clients:
+
+![Console H2 - Customers DB](docs/images/01_h2_customers_db.png)
+
+### Inventory Database
+Console H2 du service Inventory montrant la table des produits:
+
+![Console H2 - Inventory DB](docs/images/02_h2_inventory_db.png)
+
+### Billing Database
+Console H2 du service Billing montrant les tables de facturation:
+
+![Console H2 - Billing DB](docs/images/03_h2_billing_db.png)
+
+---
+
+## 📊 Eureka Dashboard
+
+Service Discovery avec Netflix Eureka montrant tous les microservices enregistrés:
+
+![Eureka Dashboard](docs/images/04_eureka_dashboard.png)
+
+---
+
+## 🔐 Keycloak - Authentification
+
+Configuration et interface d'authentification avec Keycloak.
+
+### Console d'Administration Keycloak
+Interface d'administration Keycloak montrant la gestion des clients:
+
+![Keycloak Admin - Clients](docs/images/05_keycloak_admin_clients.png)
+
+### Page de Connexion Keycloak
+Page de connexion pour l'administration Keycloak:
+
+![Keycloak Login](docs/images/06_keycloak_login.png)
+
+### Page de Connexion OIDC
+Page de connexion OpenID Connect pour l'application Angular:
+
+![Keycloak OIDC Login](docs/images/12_keycloak_oidc_login.png)
+
+---
+
+## 🌐 Interface Utilisateur (Frontend Angular)
+
+### Page d'Accueil / Dashboard
+Page principale de l'application avec vue d'ensemble (customers, products, bills):
+
+![Frontend - Dashboard](docs/images/07_frontend_dashboard.png)
+
+### Gestion des Clients
+Interface de gestion des clients avec liste et actions:
+
+![Frontend - Customers](docs/images/08_frontend_customers.png)
+
+### Gestion des Produits
+Interface de gestion des produits avec liste et actions:
+
+![Frontend - Products](docs/images/09_frontend_products.png)
+
+### Gestion des Factures
+Interface de gestion des factures avec liste et actions:
+
+![Frontend - Bills](docs/images/10_frontend_bills.png)
+
+### Dashboard Kafka Stream
+Interface de monitoring des événements Kafka en temps réel:
+
+![Frontend - Kafka Stream](docs/images/11_frontend_kafka_stream.png)
+
+---
+
+## 🔗 API REST Endpoints
+
+Démonstration des endpoints REST exposés par les microservices avec réponses JSON.
+
+### API Customers
+Réponse JSON de l'endpoint `/api/customers`:
+
+![API - Customers JSON](docs/images/13_api_customers.png)
+
+### API Products
+Réponse JSON de l'endpoint `/api/products`:
+
+![API - Products JSON](docs/images/14_api_products.png)
+
+### API Bills
+Réponse JSON de l'endpoint `/api/bills`:
+
+![API - Bills JSON](docs/images/15_api_bills.png)
+
+---
+
+## 🤖 Chatbot Telegram (Gemini AI)
+
+Bot Telegram intégré avec Gemini AI pour assistance client.
+
+### Conversation avec le Bot
+Exemples d'interactions avec le chatbot:
+
+![Telegram Bot - Conversation 1](docs/images/16_telegram_bot_1.jpg)
+
+![Telegram Bot - Conversation 2](docs/images/17_telegram_bot_2.jpg)
 
 ---
 
@@ -12,302 +134,29 @@ Application e-commerce complète avec architecture microservices sécurisée par
 .\start-all.bat
 ```
 
-Ce script lance automatiquement: Keycloak → Kafka → Discovery → Gateway → Tous les services → Frontend
+### Services et Ports
+
+| Service | Port | Description |
+|---------|------|-------------|
+| Eureka | 8761 | Service Discovery |
+| Gateway | 8888 | API Gateway |
+| Customer | 8081 | Gestion Clients |
+| Inventory | 8082 | Gestion Produits |
+| Billing | 8083 | Facturation |
+| Chatbot | 8087 | Bot IA Telegram |
+| MCP Server | 8989 | Outils IA |
+| Keycloak | 8080 | Authentification |
+
+### Consoles H2
+
+| Service | URL | JDBC URL | User |
+|---------|-----|----------|------|
+| Customer | http://localhost:8081/h2-console | `jdbc:h2:mem:customersdb` | `sa` |
+| Inventory | http://localhost:8082/h2-console | `jdbc:h2:mem:inventorydb` | `sa` |
+| Billing | http://localhost:8083/h2-console | `jdbc:h2:mem:billingdb` | `sa` |
 
 ---
 
-## 📋 Prérequis
 
-| Outil | Version | Port |
-|-------|---------|------|
-| Java JDK | 21+ | - |
-| Maven | 3.6+ | - |
-| Node.js | 18+ | - |
-| Docker Desktop | Latest | - |
-| MySQL | 8.x | 3306 |
-| Keycloak | 26.x | 8080 |
 
----
 
-## 🏗️ Architecture
-
-### Vue d'ensemble
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              FRONTEND (Angular 18)                         │
-│                            http://localhost:4200                            │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                       │
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        GATEWAY SERVICE (Port 8888)                          │
-│              Spring Cloud Gateway + OAuth2 Resource Server                  │
-│                         JWT Validation via Keycloak                         │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                       │
-          ┌────────────────────────────┼────────────────────────────┐
-          ▼                            ▼                            ▼
-┌──────────────────┐        ┌──────────────────┐        ┌──────────────────┐
-│ CUSTOMER SERVICE │        │ INVENTORY SERVICE│        │  BILLING SERVICE │
-│    Port 8081     │        │    Port 8082     │        │    Port 8083     │
-│   MySQL DB       │        │   MySQL DB       │        │   MySQL DB       │
-└──────────────────┘        └──────────────────┘        └──────────────────┘
-          │                            │                            │
-          └────────────────────────────┼────────────────────────────┘
-                                       ▼
-                        ┌──────────────────────────┐
-                        │   DISCOVERY SERVICE      │
-                        │   (Eureka) Port 8761     │
-                        └──────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           SERVICES ADDITIONNELS                             │
-├─────────────────────┬─────────────────────┬─────────────────────────────────┤
-│  SUPPLIER SERVICE   │   DATA ANALYTICS    │        CHATBOT SERVICE          │
-│    Port 8084        │     Port 8090       │          Port 8087              │
-│    Kafka Producer   │   Kafka Consumer    │     Gemini AI + Telegram        │
-├─────────────────────┴─────────────────────┴─────────────────────────────────┤
-│                           MCP SERVER (Port 8989)                            │
-│                    Model Context Protocol for AI Tools                      │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        SÉCURITÉ & AUTHENTIFICATION                          │
-├──────────────────────────────┬──────────────────────────────────────────────┤
-│      KEYCLOAK (Port 8080)    │      KEYCLOAK AUTH SERVICE (Port 8085)      │
-│   OAuth2/OIDC Server         │   Expose JWT Public Keys                    │
-│   Realm: microservices       │   Endpoints: /api/public-key, /api/jwk-set  │
-└──────────────────────────────┴──────────────────────────────────────────────┘
-```
-
----
-
-## 📊 Services Backend
-
-| Service | Port | Description | Base de Données | Événements |
-|---------|------|-------------|-----------------|------------|
-| **Discovery Service** | 8761 | Registry Eureka pour la découverte de services | - | - |
-| **Gateway Service** | 8888 | API Gateway avec validation JWT Keycloak | - | - |
-| **Customer Service** | 8081 | Gestion des clients (CRUD) | MySQL `microservices_customers` | ✅ Kafka |
-| **Inventory Service** | 8082 | Gestion des produits (CRUD) | MySQL `microservices_inventory` | ✅ Kafka |
-| **Billing Service** | 8083 | Gestion des factures | MySQL `microservices_billing` | ✅ Kafka |
-| **Supplier Service** | 8084 | Simulation fournisseurs | - | Kafka Producer |
-| **Data Analytics** | 8090 | Tableau de bord temps réel | - | Kafka Consumer |
-| **Chatbot Service** | 8087 | Bot IA (Gemini + Telegram) | - | - |
-| **MCP Server** | 8989 | Outils IA pour le chatbot | - | - |
-| **Keycloak Auth** | 8085 | Validation JWT et clés publiques | - | - |
-
----
-
-## 🗄️ Bases de Données
-
-### Migration H2 → MySQL
-
-Le projet a été migré de **H2 (en mémoire)** vers **MySQL** pour la production.
-
-#### Configuration MySQL
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/{database}?createDatabaseIfNotExist=true
-spring.datasource.username=root
-spring.datasource.password=
-spring.jpa.hibernate.ddl-auto=update
-```
-
-#### Bases créées automatiquement
-- `microservices_customers` - Données clients
-- `microservices_inventory` - Produits et stocks  
-- `microservices_billing` - Factures et lignes de facture
-
----
-
-## 🔐 Sécurité Keycloak
-
-### Configuration requise
-
-1. **Démarrer Keycloak**
-   ```bash
-   cd C:\keycloak-26.4.6\bin
-   .\kc.bat start-dev
-   ```
-
-2. **Accéder à la console admin**: http://localhost:8080 (admin/admin)
-
-3. **Créer le Realm**: `microservices`
-
-4. **Créer le Client Angular**:
-   - Client ID: `angular-client`
-   - Access Type: `public`
-   - Valid Redirect URIs: `http://localhost:4200/*`
-   - Web Origins: `http://localhost:4200`
-
-5. **Créer un utilisateur** avec mot de passe dans Users
-
-### Flux d'authentification
-
-```
-Utilisateur → Angular → Keycloak (Login) → JWT Token
-     ↓
-Angular (avec JWT) → Gateway → Validation JWT → Services Backend
-```
-
----
-
-## 📡 Apache Kafka
-
-### Composants Docker
-
-```yaml
-# docker-compose.yml
-services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.0
-    ports: ["2181:2181"]
-    
-  broker:
-    image: confluentinc/cp-kafka:7.3.0
-    ports: ["9092:9092"]
-```
-
-### Topics
-- `billing-events` - Événements de facturation
-- `inventory-events` - Mouvements de stock
-- `customer-events` - Actions clients
-
----
-
-## 🌐 Frontend Angular
-
-- **Framework**: Angular 18.2.0
-- **Port**: Dynamique (affiché au démarrage)
-- **Authentification**: Keycloak JS Adapter
-
-### Fonctionnalités
-- ✅ CRUD Customers, Products, Bills
-- ✅ Dashboard Kafka temps réel (`/kafka`)
-- ✅ Authentification OAuth2/OIDC
-- ✅ Interface responsive
-
----
-
-## 🔗 URLs & Endpoints
-
-### Dashboards
-| Service | URL |
-|---------|-----|
-| Eureka | http://localhost:8761 |
-| Keycloak | http://localhost:8080 |
-| Gateway | http://localhost:8888 |
-| phpMyAdmin | http://localhost/phpmyadmin |
-
-### API (via Gateway)
-```
-GET  /customer-service/api/customers
-POST /customer-service/api/customers
-GET  /inventory-service/api/products  
-POST /inventory-service/api/products
-GET  /billing-service/api/bills
-POST /billing-service/api/bills
-GET  /data-analytics-service/api/kafka/events
-```
-
----
-
-## 📦 Stack Technique
-
-### Backend
-- **Spring Boot** 3.3.4+
-- **Spring Cloud** 2023.0.3 (Eureka, Gateway)
-- **Spring Security OAuth2** Resource Server
-- **Spring Data JPA** + MySQL
-- **Spring Kafka**
-- **OpenFeign** (communication inter-services)
-
-### Frontend
-- **Angular** 18.2.0
-- **TypeScript** 5.5.x
-- **RxJS** 7.8.x
-- **Keycloak JS** Adapter
-
-### Infrastructure
-- **Keycloak** 26.x (OAuth2/OIDC)
-- **MySQL** 8.x
-- **Apache Kafka** 7.3.0
-- **Docker** (Kafka/Zookeeper)
-
----
-
-## 🤖 Chatbot IA (Telegram)
-
-### Configuration
-Variables d'environnement requises:
-```bash
-GEMINI_KEY=your_gemini_api_key
-TELEGRAM_API_KEY=your_telegram_bot_token
-```
-
-### Deux Modes de Fonctionnement
-
-Le chatbot propose **deux modes** via des boutons interactifs:
-
-| Mode | Description |
-|------|-------------|
-| 🗄️ **Base de Données** | Consultation clients, produits, factures via MCP Server |
-| 📋 **Politiques** | Questions sur retours, livraison, garanties (RAG) |
-
-### Architecture MCP
-- **MCP Server** expose les outils: `getCustomers`, `getProducts`, `getBills`
-- Les réponses sont générées par **Gemini AI**
-
-### Mode RAG (Politiques d'Entreprise)
-Le mode Politiques utilise **Retrieval-Augmented Generation**:
-- Répond **uniquement** basé sur le document `policies.txt`
-- Contenu: Retours (14 jours), Livraison (25-50 MAD), Garanties (2 ans), CGV
-- Rejette les questions hors sujet
-
----
-
-## 💰 Monnaie
-
-Tous les prix sont affichés en **Dirhams Marocains (MAD)**.
-
----
-
-## 📝 Notes Importantes
-
-1. **MySQL** doit être démarré avant les services
-2. **Docker** doit être actif pour Kafka/Zookeeper
-3. **Keycloak** est lancé automatiquement par `start-all.bat`
-4. Les bases de données sont créées automatiquement au premier démarrage
-
----
-
-## 📂 Structure du Projet
-
-```
-Microservices_App/
-├── billing-service/        # Service de facturation
-├── chatbot-service/        # Bot IA (Gemini + Telegram)
-│   └── mcp-server/         # MCP Server pour outils IA
-├── customer-service/       # Gestion des clients
-├── data-analytics-service/ # Dashboard Kafka
-├── discovery-service/      # Eureka Registry
-├── frontend/               # Angular 18
-├── gateway-service/        # API Gateway + Sécurité
-├── inventory-service/      # Gestion des produits
-├── keycloak-auth-service/  # Validation JWT
-├── supplier-service/       # Simulation fournisseurs
-├── docker-compose.yml      # Kafka + Zookeeper
-├── start-all.bat           # Script de démarrage
-└── README.md               # Cette documentation
-```
-
----
-
-## 👤 Auteur
-
-**Saad Bendahou**
-
----
-
-*Dernière mise à jour: Janvier 2026*
