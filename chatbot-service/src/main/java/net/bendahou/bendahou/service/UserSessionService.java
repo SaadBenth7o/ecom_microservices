@@ -8,13 +8,15 @@ import java.util.concurrent.ConcurrentHashMap;
  * Service pour gérer les sessions utilisateur et leur mode actif.
  * Mode DATABASE = consultation des données via MCP
  * Mode POLICIES = consultation des politiques via RAG
+ * Mode IMAGE_ANALYSIS = analyse et description d'images
  */
 @Service
 public class UserSessionService {
 
     public enum ChatMode {
         DATABASE, // Mode consultation base de données (MCP)
-        POLICIES // Mode consultation politiques (RAG)
+        POLICIES, // Mode consultation politiques (RAG)
+        IMAGE_ANALYSIS // Mode analyse d'images
     }
 
     private final Map<Long, ChatMode> userModes = new ConcurrentHashMap<>();

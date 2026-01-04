@@ -114,7 +114,15 @@ Réponse JSON de l'endpoint `/api/bills`:
 
 ## 🤖 Chatbot Telegram (Gemini AI)
 
-Bot Telegram intégré avec Gemini AI pour assistance client.
+Bot Telegram intégré avec Gemini AI pour assistance client. Le bot propose **trois modes de fonctionnement** via des boutons interactifs.
+
+### Modes de Fonctionnement
+
+| Mode | Description |
+|------|-------------|
+| 🗄️ **Base de Données** | Consultation des clients, produits et factures via MCP Server (Billing, Customer, Inventory) |
+| 📋 **Politiques** | Questions sur les politiques d'entreprise (retours, livraisons, garanties) via RAG |
+| 📷 **Analyse d'Images** | Description et analyse détaillée d'images envoyées par l'utilisateur avec Gemini Vision |
 
 ### Conversations avec le Bot
 
@@ -129,7 +137,23 @@ Bot Telegram intégré avec Gemini AI pour assistance client.
     <p>Le bot utilise RAG pour répondre aux questions basées sur le fichier de politique interne de l'entreprise, permettant des réponses contextuelles précises.</p>
     <img src="docs/images/17_telegram_bot_2.jpg" alt="Telegram Bot - RAG Policy Query" style="width: 100%; height: auto; border-radius: 8px;">
   </div>
+  <div style="flex: 1; min-width: 300px; max-width: 400px;">
+    <p><strong>Analyse d'Images avec Gemini Vision</strong></p>
+    <p>Le bot analyse et décrit les images envoyées par les utilisateurs de manière simple et naturelle, comme un humain le ferait.</p>
+    <img src="docs/images/18_telegram_image_analysis.png" alt="Telegram Bot - Image Analysis" style="width: 100%; height: auto; border-radius: 8px;">
+  </div>
 </div>
+
+### Fonctionnalité d'Analyse d'Images
+
+Le bot peut analyser et décrire des images envoyées par les utilisateurs :
+
+- **Envoi d'image seule** : Le bot fournit une description simple et naturelle (2-3 phrases)
+- **Image avec légende** : L'utilisateur peut poser une question spécifique sur l'image (ex: "Qu'est-ce que vous voyez ?", "Décrivez-moi cette image")
+- **Analyse intelligente** : Utilise Gemini Vision API pour identifier les éléments principaux dans l'image
+- **Descriptions naturelles** : Répond de manière conversationnelle, comme un humain le ferait
+
+
 
 ---
 

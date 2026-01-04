@@ -247,24 +247,45 @@ GEMINI_KEY=your_gemini_api_key
 TELEGRAM_API_KEY=your_telegram_bot_token
 ```
 
-### Deux Modes de Fonctionnement
+### Trois Modes de Fonctionnement
 
-Le chatbot propose **deux modes** via des boutons interactifs:
+Le chatbot propose **trois modes** via des boutons interactifs:
 
 | Mode | Description |
 |------|-------------|
-| 🗄️ **Base de Données** | Consultation clients, produits, factures via MCP Server |
-| 📋 **Politiques** | Questions sur retours, livraison, garanties (RAG) |
+| 🗄️ **Base de Données** | Consultation clients, produits, factures via MCP Server (Billing, Customer, Inventory) |
+| 📋 **Politiques** | Questions sur retours, livraison, garanties via RAG (Retrieval-Augmented Generation) |
+| 📷 **Analyse d'Images** | Description et analyse d'images envoyées par l'utilisateur avec Gemini Vision API |
 
-### Architecture MCP
+### Architecture du Chatbot
+
+Le chatbot utilise un **agent unique (AIAgent)** qui gère toutes les fonctionnalités :
+
+#### Structure des Agents
+```
+chatbot-service/
+└── agents/
+    └── AIAgent.java  → Gère tout (MCP + RAG + Images)
+```
+
+#### Architecture MCP
 - **MCP Server** expose les outils: `getCustomers`, `getProducts`, `getBills`
 - Les réponses sont générées par **Gemini AI**
+- Utilise `ChatClient` avec `MessageChatMemoryAdvisor` pour maintenir le contexte
 
 ### Mode RAG (Politiques d'Entreprise)
 Le mode Politiques utilise **Retrieval-Augmented Generation**:
 - Répond **uniquement** basé sur le document `policies.txt`
 - Contenu: Retours (14 jours), Livraison (25-50 MAD), Garanties (2 ans), CGV
 - Rejette les questions hors sujet
+
+### Mode Analyse d'Images
+Le mode Analyse d'Images utilise **Gemini Vision API**:
+- Analyse les images envoyées par les utilisateurs via Telegram
+- Fournit des descriptions courtes et naturelles (2-3 phrases par défaut)
+- Supporte les questions spécifiques via légendes d'images
+- Utilise un ChatClient séparé sans mémoire pour éviter la persistance des images
+- Ne nécessite pas les outils MCP (pas de conflit avec les outils de base de données)
 
 ---
 
@@ -289,6 +310,12 @@ Tous les prix sont affichés en **Dirhams Marocains (MAD)**.
 Microservices_App/
 ├── billing-service/        # Service de facturation
 ├── chatbot-service/        # Bot IA (Gemini + Telegram)
+│   ├── agents/
+│   │   └── AIAgent.java    # Agent unique (MCP + RAG + Images)
+│   ├── telegram/
+│   │   └── TelegramBot.java # Gestion des messages Telegram
+│   ├── service/
+│   │   └── UserSessionService.java # Gestion des modes utilisateur
 │   └── mcp-server/         # MCP Server pour outils IA
 ├── customer-service/       # Gestion des clients
 ├── data-analytics-service/ # Dashboard Kafka
